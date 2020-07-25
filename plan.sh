@@ -1,4 +1,4 @@
-pkg_name=lens-helm
+pkg_name=lens-helm3
 pkg_origin=holo
 pkg_version="1.0"
 pkg_maintainer="Chris Alfano <chris@jarv.us>"
@@ -6,7 +6,7 @@ pkg_license=("MIT")
 
 pkg_deps=(
   core/bash
-  jarvus/helm
+  jarvus/helm3
   jarvus/hologit
 )
 

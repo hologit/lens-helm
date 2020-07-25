@@ -1,0 +1,39 @@
+#!/bin/bash -e
+
+INPUT_TREE="${1?<input> required}"
+HOLOLENS_OUTPUT_ROOT="${HOLOLENS_OUTPUT_ROOT:-output}"
+HOLOLENS_OUTPUT_FILENAME="${HOLOLENS_OUTPUT_FILENAME:-manifest.yaml}"
+export OUTPUT_PATH="${HOLOLENS_OUTPUT_ROOT}/${HOLOLENS_OUTPUT_FILENAME}"
+
+# redirect all output to stderr
+{
+  # export git tree to disk
+  git holo lens export-tree "${INPUT_TREE}"
+
+  # execute compilation
+  pushd "${GIT_WORK_TREE}" > /dev/null
+  mkdir -p "${HOLOLENS_OUTPUT_ROOT}"
+  build-manifest
+  build_status=$?
+  popd > /dev/null
+
+  # process result
+  if [ $build_status -ne 0 ]; then
+    echo -e "\nhelm template failed with exit status ${build_status}"
+    exit ${build_status}
+  fi
+
+  if [ ! -f  "${OUTPUT_PATH}" ]; then
+    echo -e "\n${OUTPUT_PATH} not found, build must have failed"
+    exit 1
+  fi
+
+  echo -e "\nhelm template completed successfully"
+
+  # add output to git index
+  git add -f "${OUTPUT_PATH}"
+
+} 1>&2
+
+# output tree hash
+git write-tree --prefix="${HOLOLENS_OUTPUT_ROOT}"

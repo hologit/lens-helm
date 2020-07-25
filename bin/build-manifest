@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+_helm_args="--kube-version ${HOLOLENS_KUBE_VERSION:-1.17.0}"
+
+for _value_file in ${HOLOLENS_VALUE_FILES//,/ }; do
+    _helm_args="${_helm_args} --values ${_value_file}"
+done
+
+echo "executing: helm template ${_helm_args}"
+helm template \
+    ${_helm_args} \
+    "${HOLOLENS_CHART_PATH:-.}" \
+    > "${OUTPUT_PATH}"

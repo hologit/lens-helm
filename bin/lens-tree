@@ -30,6 +30,11 @@ export OUTPUT_PATH="${HOLOLENS_HELM_OUTPUT_ROOT}/${HOLOLENS_HELM_OUTPUT_FILENAME
 
   echo -e "\nhelm template completed successfully"
 
+  # patch namespaces
+  if [ -n "${HOLOLENS_HELM_NAMESPACE_FILL}" ] || [ -n "${HOLOLENS_HELM_NAMESPACE_OVERRIDE}" ]; then
+    patch-namespaces "${OUTPUT_PATH}"
+  fi
+
   # add output to git index
   git add -f "${OUTPUT_PATH}"
 

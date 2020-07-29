@@ -6,6 +6,7 @@ pkg_license=("MIT")
 
 pkg_deps=(
   core/bash
+  core/node
   jarvus/helm3
   jarvus/hologit
 )
@@ -17,14 +18,23 @@ do_build() {
   return 0
 }
 
-do_install() {
-  build_line "Generating lens script"
+do_build() {
 
-  pushd "${pkg_prefix}" > /dev/null
-  cp "${PLAN_CONTEXT}/bin"/* "bin/"
-  fix_interpreter "bin/*" core/bash bin/bash
-  chmod +x "bin/"*
+  pushd "${CACHE_PATH}" > /dev/null
+    build_line "Preparing bin scripts"
+    mkdir -v "bin"
+    cp -v "${PLAN_CONTEXT}/bin"/* "./bin/"
+    fix_interpreter "bin/*" core/node bin/node
+    fix_interpreter "bin/*" core/bash bin/bash
+
+    build_line "Running: npm install"
+    cp -v "${PLAN_CONTEXT}"/package{,-lock}.json ./
+    npm ci
   popd > /dev/null
+}
+
+do_install() {
+  cp -r "${CACHE_PATH}"/* "${pkg_prefix}/"
 }
 
 do_strip() {

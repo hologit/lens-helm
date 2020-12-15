@@ -14,13 +14,15 @@ done
 
 echo "executing: helm template ${_helm_args}"
 (
-    cat <<End-of-Yaml
+    if [ -n "${HOLOLENS_HELM_NAMESPACE}" ]; then
+        cat <<End-of-Yaml
 ---
 kind: Namespace
 apiVersion: v1
 metadata:
   name: "${HOLOLENS_HELM_NAMESPACE}"
 End-of-Yaml
+    fi
 
     helm template \
         ${_helm_args} \

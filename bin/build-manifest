@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# install helm dependencies
+(
+    echo "executing: helm dependency update"
+    cd "${HOLOLENS_HELM_CHART_PATH:-.}"
+    helm dependency update
+)
+
+# prepare helm template args
 if [ -n "${HOLOLENS_HELM_NAMESPACE}" ]; then
     _helm_args="${_helm_args} --namespace ${HOLOLENS_HELM_NAMESPACE}"
 fi
@@ -12,6 +20,7 @@ for _value_file in ${HOLOLENS_HELM_VALUE_FILES//,/ }; do
     _helm_args="${_helm_args} --values ${_value_file}"
 done
 
+# execute helm template
 echo "executing: helm template ${_helm_args}"
 (
     if [ -n "${HOLOLENS_HELM_NAMESPACE}" ]; then

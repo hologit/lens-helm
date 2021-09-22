@@ -16,6 +16,10 @@ if [ -n "${HOLOLENS_HELM_RELEASE_NAME}" ]; then
     _helm_args="${_helm_args} --release-name ${HOLOLENS_HELM_RELEASE_NAME}"
 fi
 
+if [ "${HOLOLENS_HELM_INCLUDE_CRDS}" = true ]; then
+    _helm_args="${_helm_args} --include-crds"
+fi
+
 for _value_file in ${HOLOLENS_HELM_VALUE_FILES//,/ }; do
     _helm_args="${_helm_args} --values ${_value_file}"
 done

@@ -1,6 +1,6 @@
 pkg_name=lens-helm3
 pkg_origin=holo
-pkg_version="1.5"
+pkg_version="1.22"
 pkg_maintainer="Chris Alfano <chris@jarv.us>"
 pkg_license=("MIT")
 

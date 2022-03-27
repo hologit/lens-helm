@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+# defaults for Kubernetes 1.22
+if [ -z "${HOLOLENS_HELM_KUBE_VERSION}" ]; then
+    HOLOLENS_HELM_KUBE_VERSION='1.22'
+fi
+
 # install helm dependencies
 (
     echo "executing: helm dependency update"
@@ -24,7 +29,7 @@ for _value_file in ${HOLOLENS_HELM_VALUE_FILES//,/ }; do
     _helm_args="${_helm_args} --values ${_value_file}"
 done
 
-_helm_args="${_helm_args} --kube-version ${HOLOLENS_HELM_KUBE_VERSION:-1.21}"
+_helm_args="${_helm_args} --kube-version ${HOLOLENS_HELM_KUBE_VERSION}"
 
 # execute helm template
 echo "executing: helm template ${_helm_args}"

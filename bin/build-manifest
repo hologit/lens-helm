@@ -5,11 +5,11 @@ if [ -z "${HOLOLENS_HELM_KUBE_VERSION}" ]; then
     HOLOLENS_HELM_KUBE_VERSION='1.22'
 fi
 
-# if [ ! -v HOLOLENS_HELM_KUBE_APIS ]; then
-#     HOLOLENS_HELM_KUBE_APIS='
-#         networking.k8s.io/v1
-#     '
-# fi
+if [ ! -v HOLOLENS_HELM_KUBE_APIS ]; then
+    HOLOLENS_HELM_KUBE_APIS='
+        networking.k8s.io/v1/Ingress
+    '
+fi
 
 # install helm dependencies
 (
